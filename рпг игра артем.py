@@ -48,20 +48,13 @@ class Character:
 
 
 
-
-
 class Mage(Character):
     def __init__(self, name, age, race, health, mana):
         super().__init__(name, age, race, health)
         self.mana = mana
 
-    def cast_spell(self):
-        self.mana -= self.mana
-        if self.mana < 0:
-            self.mana += self.mana
-            return "недостаточно очков маны"
-        else:
-            return f"{self.name} использовал магию, стоимостью {self.mana} очков маны"
+    def attack(self):
+        f"{self.name} использовал магию, стоимостью {self.mana} очков маны"
 
     def mana_up(self, num):
         self.mana += num
@@ -80,12 +73,7 @@ class Warrior(Character):
         self.strength = strength
 
     def attack(self):
-        self.strength -= self.strength
-        if self.strength < 0:
-            self.strength += self.strength
-            return "недостаточно очков силы"
-        else:
-            return f"{self.name} сделал мощный удар, использовав {self.strength} очков силы"
+        f"{self.name} сделал мощный удар, использовав {self.strength} очков силы"
 
     def strength_up(self, num):
         self.strength += num
@@ -105,13 +93,8 @@ class Archer(Character):
         super().__init__(name, age, race, health)
         self.accuracy = accuracy
 
-    def shoot_arrow(self):
-            self.accuracy -= self.accuracy
-            if self.accuracy < 0:
-                self.accuracy += self.accuracy
-                return "недостаточно очков меткости"
-            else:
-                return f"{self.name} сделал точный выстрел, использовав {self.accuracy} очков меткости"
+    def attack(self):
+        f"{self.name} сделал точный выстрел, использовав {self.accuracy} очков меткости"
 
     def accuracy_up(self, num):
         self.accuracy += num
@@ -129,14 +112,8 @@ class Monk(Character):
         super().__init__(name, age, race, health)
         self.spiritual_power = spiritual_power
 
-    def meditate(self):
-        self.spiritual_power -= self.spiritual_power
-        if self.spiritual_power < 0:
-            self.spiritual_power += self.spiritual_power
-            return "недостаточно очков духовной силы"
-        else:
-            self.health += 150
-            return f"{self.name} увеличивает очки здоровья союзника на 150, используя {self.spiritual_power} очков духовной силы"
+    def attack(self):
+        f"{self.name} увеличивает очки здоровья союзника на 150, используя {self.spiritual_power} очков духовной силы"
 
     def spiritual_power_up(self, num):
         self.spiritual_power += num
@@ -159,13 +136,8 @@ class Monster(Character):
         super().__init__(name, age, race, health)
         self.stealing_hp = stealing_hp
 
-    def scream(self):
-            self.stealing_hp -= self.stealing_hp
-            if self.stealing_hp < 0:
-                self.stealing_hp += self.stealing_hp
-                return "недостаточно очков воровства"
-            else:
-                return f"{self.name} своровал {self.stealing_hp} очков здоровья"
+    def attack(self):
+        f"{self.name} своровал {self.stealing_hp} очков здоровья"
 
     def stealing_hp_up(self, num):
         self.stealing_hp += num
@@ -230,29 +202,90 @@ class Weapons(Item):
             user.stealing_hp(self.effect)
 
 
+def fight(user, monster):
+    while user.health > 0 or monster.health>0:
+        if monster.health > 0:
+            monster.attack(user)
+        else:
+            break
+        time.sleep(2)
+        if user.health>0:
+            user.attack(monster)
+        else:
+            break
+
+
+def Main():
+    print("""
+    Игрок просыпается в полуразрушенной башне, окруженной густым туманом.
+    Память фрагментарна: последнее, что помнит персонаж – это ослепительная вспышка света и оглушительный грохот.
+    Он/она находится в лохмотьях, рядом лежит сломанный посох, очевидно, некогда бывший могущественным орудием.
+    Внезапно, башню сотрясает землятресение, заставляя персонажа поспешить найти убежище.
+
+    Во время поисков безопасного места, игрок натыкается на полузасыпанную комнату, в которой находит письмо.
+    Письмо написано древним шрифтом и рассказывает о “Пророчестве Заката” – легенде о том, что в час величайшей тьмы родится избранный, способный спасти Аэтор.
+    В письме также упоминается символ, похожий на татуировку на запястье игрока, который он/она до сих пор не замечал(а).
+
+    Выйдя из башни, игрок оказывается в мрачном лесу, окруженном руинами бывшего великолепного города.
+    Он/она встречает умирающего старика, который перед смертью рассказывает о “Ключе к Рассвету” – артефакте, способном вернуть Аэтору былую славу.
+    Старик говорит, что путь к нему лежит через “Запретный Храм”, однако предупреждает о опасности, подстерегающей путешественника.
+    С этими словами старик умирает, оставляя игрока наедине с суровой реальностью умирающего мира.
+    
+    Звуки ветра и скрип старой древесины заполняют тишину. Туман клубится вокруг тебя, скрывая то, что ждет впереди.
+    Пробуждение… или, быть может, возрождение?
+    
+    Ты чувствуешь прилив странной силы, эхо прошлого, шепчущее тебе на ухо о забытых временах и грядущих битвах.
+    Символ на твоем запястье пульсирует, напоминая о предназначении, которое ты пока еще не в силах постичь.
+    Аэтор ждет своего спасителя… или, возможно, палача? Выбор за тобой.
+    """)
 
 
 
-mage = Mage("Руслан", 14, "Человек", health=200, mana=200)
-warrior = Warrior("Богдан", 1, "Орк", health=1000, strength=150)
-archer = Archer("Даниил", 25, "Эльф", health=250, accuracy=500)
-monk = Monk("Эльдар", 180, "Тёмный эльф", health=500, spiritual_power=400)
-monster = Monster("Shadow Fiend", 50, "Космодесант", health=2000, stealing_hp=100)
 
 
-monk.buff_smbd(mage)
-time.sleep(5)
-monster.steal_hp_smbd(warrior)
-time.sleep(5)
-archer.take_damage(monster)
-time.sleep(5)
-t2 = Weapons("Daedalus")
-t1 = Food("Яблоко")
-monk.find(t1)
-time.sleep(5)
-monk.find(t2)
-time.sleep(3)
-t1.get_heal(monk)
-time.sleep(3)
-t2.damage_up(monk)
+user = ""
+name = input("Введите имя")
+age = int(input("Введите возраст"))
+race = input("Введите расу")
+class_user = int(input("Выберите класс персонажа: 1 - маг, 2 - воин, 3 - лучник, 4 - монах"))
+if class_user == 1:
+    user = Mage(name, age, race, 100, 75)
+    print(f"""
+    {name}, маг… Имя, прошептанное ветром сквозь руины. Класс, предначертанный звездами.
+    Ты выбрал(а) свой путь, и теперь судьба Аэтора в твоих руках. Темные силы уже чувствуют твое приближение…
+    Будь осторожен(а).
+    """)
+elif class_user == 2:
+    user = Warrior(name, age, race, 250, 50)
+    print(f"""
+    Здравствуй, {name}, воин! Рад приветствовать тебя в рядах тех, кто стремится спасти Аэтор.
+    Как воин, ты обладаешь уникальными навыками и способностями, которые станут тебе верными союзниками в этом нелегком путешествии.
+    Помни, путь предстоит долгий и опасный, но вместе мы преодолеем любые трудности!
+    """)
+elif class_user == 3:
+    user = Archer(name, age, race, 75, 100)
+    print(f"""
+    {name}, лучник. Ну, чего стоишь? Аэтор ждет. Начинаем!
+    """)
+elif class_user == 4:
+    user = Monk(name, age, race, 150, 50)
+    print(f"""
+    Так значит, тебя зовут {name}, монах. Аэтор помнит твои деяния еще до твоего рождения. Пророчество сбывается.
+    Твой путь начинается сейчас, {name}, и от твоих решений зависит судьба всего мира.
+    Пусть духовная сила монаха будет твоим щитом и мечом в этой борьбе за свет.
+    """)
+else:
+    print(f"""
+    Привет, {name}! Ну что, готов(а) спасти мир? Надеюсь, ты взял(а) с собой запасные штаны, потому что грязи тут будет по колено!
+    Давай исправляй то что ты наделал. Такого класса нету!
+    """)
+    raise ValueError("Вы выбрали несуществующую расу")
 
+
+print(f""" Получено новое задание: достичь “Запретного Храма” и разобраться с причинами катастрофы, нависшей над Аэтором.
+        Перед героем открывается мир, полный опасности и интриг, где каждое решение будет иметь важнейшие последствия.
+        Наш герой послушал старика и отправился прямиком к Запретному Храму. 
+        Но вдруг из кустов на него выпригивает монстр. Это сражение научит героя драться и использовать расходники.
+""")
+m1 = Monster("∫∂∇∮∑", "∏∈", "∉∪∩⊂⊃", 100, 25)
+fight(user, m1)
