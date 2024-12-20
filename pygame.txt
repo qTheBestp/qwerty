@@ -1,0 +1,44 @@
+import random
+import time
+import pygame as pg
+scr = pg.display.set_mode((800, 600))
+x = 380
+y = 280
+xsp = 20
+ysp = 0
+while True:
+    pg.display.flip()
+    scr.fill((255, 255, 255))
+    pg.draw.circle(scr, (0, 0, 0), (random.randint(0, 800), random.randint(0, 600)), 250)
+    pg.draw.rect(scr, (255, 0, 0), (x, y, 20, 20))
+    if x >= 800:
+        x = 0
+
+    if x < 0:
+        x = 800
+
+    if y < 0:
+        y = 600
+
+    if y >= 600:
+        y = 0
+
+    for i in pg.event.get():
+        if i.type == pg.QUIT:
+            exit()
+        if i.type == pg.KEYDOWN:
+            if i.key == pg.K_LEFT:
+                xsp = -20
+                ysp = 0
+            if i.key == pg.K_RIGHT:
+                xsp = 20
+                ysp = 0
+            if i.key == pg.K_UP:
+                xsp = 0
+                ysp = -20
+            if i.key == pg.K_DOWN:
+                xsp = 0
+                ysp = 20
+    x += xsp
+    y += ysp
+    time.sleep(0.2)
