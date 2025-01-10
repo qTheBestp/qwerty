@@ -6,39 +6,99 @@ x = 380
 y = 280
 xsp = 20
 ysp = 0
+xt = [340, 360]
+yt = [280, 280]
+lenght = 2
+loose = False
+xapple = random.randint(0, 780)//20*20
+yapple = random.randint(0, 580)//20*20
+a = 0
+
 while True:
     pg.display.flip()
-    scr.fill((255, 255, 255))
-    pg.draw.circle(scr, (0, 0, 0), (random.randint(0, 800), random.randint(0, 600)), 250)
-    pg.draw.rect(scr, (255, 0, 0), (x, y, 20, 20))
-    if x >= 800:
-        x = 0
+    scr.fill((0, 255, 0))
+    pg.draw.circle(scr, (255, 0, 0), (xapple+10, yapple+10), 10)
+    pg.draw.rect(scr, (0, 0, 255), (x, y, 20, 20))
 
-    if x < 0:
-        x = 800
+    for i in range(-1, -lenght-1, -1):
+        pg.draw.rect(scr, (0, 0, 255), (xt[i], yt[i], 20, 20))
+        if x == xt[i] and y == yt[i]:
+            loose = True
 
-    if y < 0:
-        y = 600
+    xt.append(x)
+    yt.append(y)
 
-    if y >= 600:
-        y = 0
 
+    if xapple == x and yapple == y:
+        xapple = random.randint(0, 780) // 20 * 20
+        yapple = random.randint(0, 580) // 20 * 20
+        lenght +=1
+        a += 1
+        print(a)
     for i in pg.event.get():
         if i.type == pg.QUIT:
             exit()
         if i.type == pg.KEYDOWN:
-            if i.key == pg.K_LEFT:
+            if i.key == pg.K_LEFT and xsp != 20:
                 xsp = -20
                 ysp = 0
-            if i.key == pg.K_RIGHT:
+            if i.key == pg.K_RIGHT and xsp != -20:
                 xsp = 20
                 ysp = 0
-            if i.key == pg.K_UP:
+            if i.key == pg.K_UP and ysp != 20:
                 xsp = 0
                 ysp = -20
-            if i.key == pg.K_DOWN:
+            if i.key == pg.K_DOWN and ysp != -20:
                 xsp = 0
                 ysp = 20
+            if i.key == pg.K_r:
+                scr = pg.display.set_mode((800, 600))
+                x = 380
+                y = 280
+                xsp = 20
+                ysp = 0
+                xt = [340, 360]
+                yt = [280, 280]
+                lenght = 2
+                loose = False
+                xapple = random.randint(0, 780) // 20 * 20
+                yapple = random.randint(0, 580) // 20 * 20
+
+
     x += xsp
     y += ysp
     time.sleep(0.2)
+    if x > 780:
+        x = 0
+
+    if x < 0:
+        x = 780
+
+    if y < 0:
+        y = 580
+
+    if y > 580:
+        y = 0
+
+
+
+    while loose:
+        scr.fill((255, 0, 0))
+        pg.display.flip()
+        for i in pg.event.get():
+            if i.type == pg.QUIT:
+                exit()
+            if i.type == pg.KEYDOWN:
+                if i.key == pg.K_r:
+                    scr = pg.display.set_mode((800, 600))
+                    x = 380
+                    y = 280
+                    xsp = 20
+                    ysp = 0
+                    xt = [340, 360]
+                    yt = [280, 280]
+                    lenght = 2
+                    loose = False
+                    xapple = random.randint(0, 780) // 20 * 20
+                    yapple = random.randint(0, 580) // 20 * 20
+
