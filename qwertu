@@ -1,0 +1,67 @@
+import time
+
+import pygame as pg
+pg.init()
+
+class simpleMan(pg.sprite.Sprite):
+    def __init__(self):
+        self.a = [pg.image.load("Idle1.png"),
+                  pg.image.load("Idle2.png"),
+                  pg.image.load("Idle3.png"),
+                  pg.image.load("Idle4.png"),
+                  pg.image.load("Idle5.png"),
+                  pg.image.load("Idle6.png"),
+                  pg.image.load("Idle7.png"),
+                  pg.image.load("Idle8.png")]
+
+        self.b = [pg.image.load("Run1.png"),
+                  pg.image.load("Run2.png"),
+                  pg.image.load("Run3.png"),
+                  pg.image.load("Run4.png"),
+                  pg.image.load("Run5.png"),
+                  pg.image.load("Run6.png"),
+                  pg.image.load("Run7.png"),
+                  pg.image.load("Run8.png")]
+
+        self.x = 200
+        self.y = 400
+        self.crop = 0
+        self.xsp = 0
+
+    def control(self, event):
+        for i in pg.event.get():
+            if i.type == pg.KEYDOWN:
+                if i.key == pg.K_SPACE:
+                    self.xsp = 10
+            if i.type == pg.KEYUP:
+                if i.key == pg.K_SPACE:
+                    self.xsp = 0
+
+
+    def update(self, scr):
+        if xsp == 0:
+            scr.blit(self.a[self.crop], (self.x, self.y - self.a[self.crop].get_size()[1]))
+        if xsp == 10:
+            scr.blit(self.b[self.crop], (self.x, self.y - self.b[self.crop].get_size()[1]))
+
+        self.x += xsp
+
+        self.crop += 1
+        if self.crop > 7:
+            self.crop = 0
+
+
+
+
+
+scr = pg.display.set_mode((800, 600))
+
+c = simpleMan()
+while True:
+    scr.fill((0, 255, 0))
+    for i in pg.event.get():
+        if i.type == pg.QUIT:
+            pg.quit()
+    scr = c.update(scr)
+    time.sleep(0.1)
+    pg.display.flip()
