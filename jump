@@ -1,0 +1,100 @@
+import time
+import pygame as pg
+pg.init()
+
+class simpleMan(pg.sprite.Sprite):
+    def __init__(self):
+        self.stay = [pg.image.load("Idle1.png"),
+                  pg.image.load("Idle2.png"),
+                  pg.image.load("Idle3.png"),
+                  pg.image.load("Idle4.png"),
+                  pg.image.load("Idle5.png"),
+                  pg.image.load("Idle6.png"),
+                  pg.image.load("Idle7.png"),
+                  pg.image.load("Idle8.png")]
+
+        self.run = [pg.image.load("Run1.png"),
+                  pg.image.load("Run2.png"),
+                  pg.image.load("Run3.png"),
+                  pg.image.load("Run4.png"),
+                  pg.image.load("Run5.png"),
+                  pg.image.load("Run6.png"),
+                  pg.image.load("Run7.png"),
+                  pg.image.load("Run8.png")]
+
+        self.jump = [pg.image.load("Jump1.png"),
+                  pg.image.load("Jump2.png")]
+
+
+        self.x = 200
+        self.y = 400
+        self.crop = 0
+        self.xsp = 0
+        self.ysp = 0
+        self.staw = True
+
+    def control(self, event):
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_RIGHT:
+                    self.xsp = 5
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_LEFT:
+                    self.xsp = -5
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_LEFT:
+                    self.xsp = 0
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_RIGHT:
+                    self.xsp = 0
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.ysp = 5
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_SPACE:
+                    self.ysp = 0
+
+
+    def update(self, scr):
+        if self.xsp == 0 and self.ysp == 0:
+            if self.staw == True:
+                scr.blit(self.stay[self.crop], (self.x, self.y - self.stay[self.crop].get_size()[1]))
+            else:
+                scr.blit(pg.transform.flip(self.stay[self.crop], True, False), (self.x - self.stay[self.crop].get_size()[0]+50, self.y - self.stay[self.crop].get_size()[1]))
+        elif self.xsp == 5:
+            scr.blit(self.run[self.crop], (self.x, self.y - self.run[self.crop].get_size()[1]))
+            self.staw = True
+        elif self.xsp == -5:
+            scr.blit(pg.transform.flip(self.run[self.crop], True, False), (self.x, self.y - self.run[self.crop].get_size()[1]))
+            self.staw = False
+        elif self.ysp == 5:
+            scr.blit(self.jump[self.crop%2], (self.x- self.jump[self.crop%2].get_size()[0]+50, self.y - self.jump[self.crop%2].get_size()[1]))
+
+
+
+
+        self.crop += 1
+        if self.crop > 7:
+            self.crop = 0
+
+        self.x += self.xsp
+        self.y -= self.ysp
+        return scr
+
+
+
+
+
+scr = pg.display.set_mode((800, 600))
+
+man = simpleMan()
+while True:
+    scr.fill((0, 255, 0))
+    for i in pg.event.get():
+        if i.type == pg.QUIT:
+            pg.quit()
+        else:
+            man.control(i)
+
+    scr = man.update(scr)
+    time.sleep(0.1)
+    pg.display.flip()
