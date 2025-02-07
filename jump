@@ -35,16 +35,16 @@ class simpleMan(pg.sprite.Sprite):
 
     def control(self, event):
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_RIGHT:
+                if event.key == pg.K_d:
                     self.xsp = 5
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_LEFT:
+                if event.key == pg.K_a:
                     self.xsp = -5
             if event.type == pg.KEYUP:
-                if event.key == pg.K_LEFT:
+                if event.key == pg.K_a:
                     self.xsp = 0
             if event.type == pg.KEYUP:
-                if event.key == pg.K_RIGHT:
+                if event.key == pg.K_d:
                     self.xsp = 0
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
