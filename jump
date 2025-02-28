@@ -60,10 +60,10 @@ class simpleMan(pg.sprite.Sprite):
                 scr.blit(self.stay[self.crop], (self.x, self.y - self.stay[self.crop].get_size()[1]))
             else:
                 scr.blit(pg.transform.flip(self.stay[self.crop], True, False), (self.x - self.stay[self.crop].get_size()[0]+50, self.y - self.stay[self.crop].get_size()[1]))
-        elif self.xsp == 5:
+        elif self.xsp == 5 and self.juwp == False:
             scr.blit(self.run[self.crop], (self.x, self.y - self.run[self.crop].get_size()[1]))
             self.staw = True
-        elif self.xsp == -5:
+        elif self.xsp == -5 and self.juwp == False:
             scr.blit(pg.transform.flip(self.run[self.crop], True, False), (self.x, self.y - self.run[self.crop].get_size()[1]))
             self.staw = False
         elif self.juwp == True:
