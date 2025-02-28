@@ -32,30 +32,30 @@ class simpleMan(pg.sprite.Sprite):
         self.xsp = 0
         self.ysp = 0
         self.staw = True
+        self.juwp = False
+
 
     def control(self, event):
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
                     self.xsp = 5
-            if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a:
                     self.xsp = -5
+                if event.key == pg.K_SPACE and self.juwp == False:
+                    self.juwp = True
+                    self.ysp = 10
             if event.type == pg.KEYUP:
                 if event.key == pg.K_a:
                     self.xsp = 0
-            if event.type == pg.KEYUP:
                 if event.key == pg.K_d:
                     self.xsp = 0
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.ysp = 5
-            if event.type == pg.KEYUP:
-                if event.key == pg.K_SPACE:
-                    self.ysp = 0
+
+
 
 
     def update(self, scr):
-        if self.xsp == 0 and self.ysp == 0:
+        if self.xsp == 0 and self.ysp == 0 and self.juwp == False:
             if self.staw == True:
                 scr.blit(self.stay[self.crop], (self.x, self.y - self.stay[self.crop].get_size()[1]))
             else:
@@ -66,9 +66,19 @@ class simpleMan(pg.sprite.Sprite):
         elif self.xsp == -5:
             scr.blit(pg.transform.flip(self.run[self.crop], True, False), (self.x, self.y - self.run[self.crop].get_size()[1]))
             self.staw = False
-        elif self.ysp == 5:
-            scr.blit(self.jump[self.crop%2], (self.x- self.jump[self.crop%2].get_size()[0]+50, self.y - self.jump[self.crop%2].get_size()[1]))
+        elif self.juwp == True:
+            if self.staw == True:
+                scr.blit(self.jump[self.crop % 2], (self.x - self.jump[self.crop % 2].get_size()[0] + 50, self.y - self.jump[self.crop % 2].get_size()[1]))
+            else:
+                scr.blit(pg.transform.flip(self.jump[self.crop%2], True, False), (self.x, self.y - self.jump[self.crop%2].get_size()[1]))
 
+
+        if self.juwp == True:
+            self.ysp -= 1
+            if self.y > 400:
+                self.ysp = 0
+                self.juwp = False
+                self.y = 400
 
 
 
