@@ -1,9 +1,30 @@
+import random
 import time
+
+import pygame
 import pygame as pg
 pg.init()
 
-class simpleMan(pg.sprite.Sprite):
-    def __init__(self):
+class Platform:
+    def __init__(self, screen, x, y, l, h, color=(200, 200, 200)):
+        self.x = x
+        self.y = y
+        self.l = l
+        self.h = h
+        self.screen = screen
+        self.color = color
+
+
+    def draw(self):
+        pg.draw.rect(surface=self.screen, color=self.color, rect=(self.x, self.y, self.l, self.h))
+
+
+platforms: list[Platform] = []
+
+
+class SimpleMan(pg.sprite.Sprite):
+    def __init__(self, *groups):
+        super().__init__(*groups)
         self.stay = [pg.image.load("Idle1.png"),
                   pg.image.load("Idle2.png"),
                   pg.image.load("Idle3.png"),
@@ -35,12 +56,13 @@ class simpleMan(pg.sprite.Sprite):
         self.juwp = False
 
 
+
     def control(self, event):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
-                    self.xsp = 5
+                    self.xsp = 7
                 if event.key == pg.K_a:
-                    self.xsp = -5
+                    self.xsp = -7
                 if event.key == pg.K_SPACE and self.juwp == False:
                     self.juwp = True
                     self.ysp = 10
@@ -59,10 +81,10 @@ class simpleMan(pg.sprite.Sprite):
                 scr.blit(self.stay[self.crop], (self.x, self.y - self.stay[self.crop].get_size()[1]))
             else:
                 scr.blit(pg.transform.flip(self.stay[self.crop], True, False), (self.x - self.stay[self.crop].get_size()[0]+50, self.y - self.stay[self.crop].get_size()[1]))
-        elif self.xsp == 5 and self.juwp == False:
+        elif self.xsp == 7 and self.juwp == False:
             scr.blit(self.run[self.crop], (self.x, self.y - self.run[self.crop].get_size()[1]))
             self.staw = True
-        elif self.xsp == -5 and self.juwp == False:
+        elif self.xsp == -7 and self.juwp == False:
             scr.blit(pg.transform.flip(self.run[self.crop], True, False), (self.x, self.y - self.run[self.crop].get_size()[1]))
             self.staw = False
         elif self.juwp == True:
@@ -72,9 +94,9 @@ class simpleMan(pg.sprite.Sprite):
                 scr.blit(pg.transform.flip(self.jump[self.crop%2], True, False), (self.x, self.y - self.jump[self.crop%2].get_size()[1]))
 
 
+
         if self.juwp == True:
             self.ysp -= 1
-#            if scr.get_at((self.x, self.y)) == (0, 200, 200):
             if self.y > 400:
                 self.ysp = 0
                 self.juwp = False
@@ -89,33 +111,40 @@ class simpleMan(pg.sprite.Sprite):
 
         self.x += self.xsp
         self.y -= self.ysp
+
+#        for platform in platforms:
+#            print(platform.x)
+#            print(platform.y)
+#            if self.x == platform.x
+
         return scr
-
-
-
 
 
 scr = pg.display.set_mode((800, 600))
 
-man = simpleMan()
+platforms.append(Platform(scr, 200, 400, 100, 40, color=(200, 200, 200)))
+
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+platforms.append(Platform(scr, random.randint(100, 600), random.randint(0, 400), 100, 40, color=(200, 200, 200)))
+
+
+
+man = SimpleMan()
 while True:
+
     scr.fill((0, 255, 0))
-    pg.draw.rect(scr, (0, 200, 200), (200, 400, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (375, 400, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (550, 375, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (700, 325, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (575, 280, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (425, 250, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (250, 300, 100, 40))
-    pg.draw.rect(scr, (0, 200, 200), (125, 250, 100, 40))
-
-
+    for i in range(len(platforms)):
+        platforms[i].draw()
     for i in pg.event.get():
         if i.type == pg.QUIT:
             pg.quit()
         else:
             man.control(i)
-
 
     scr = man.update(scr)
     time.sleep(0.1)
